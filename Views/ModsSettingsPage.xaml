@@ -20,7 +20,7 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8B7;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <Button Content="Browse folder" />
+                    <Button Content="Browse folder" Click="PickFolderButton_Click" />
                 </toolkit:SettingsCard>
             </ScrollViewer>
         </StackPanel>
