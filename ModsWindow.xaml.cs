@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Microsoft.UI.Xaml.Media.Animation;
 
 namespace LemnisGateLauncher
 {
@@ -11,8 +12,8 @@ namespace LemnisGateLauncher
     {
         private readonly Dictionary<string, Type> _pages = new Dictionary<string, Type>
         {
-            { "LemnisGateLauncher.Views.ModsHomePage", typeof(Views.ModsHomePage) }
-            // Ajoutez d'autres pages ici
+            { "LemnisGateLauncher.Views.ModsHomePage", typeof(Views.ModsHomePage) },
+            { "Settings", typeof(Views.ModsSettingsPage) }
         };
 
         public ModsWindow()
@@ -34,13 +35,17 @@ namespace LemnisGateLauncher
 
             if (_pages.TryGetValue(pageTag, out Type? pageType))
             {
-                ContentFrame.Navigate(pageType, null, new Microsoft.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo());
+                ContentFrame.Navigate(pageType, null, new EntranceNavigationTransitionInfo());
             }
         }
 
         private void NavigationViewControl_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (args.InvokedItemContainer?.Tag != null)
+            if (args.IsSettingsInvoked)
+            {
+                NavigateToPage("Settings");
+            }
+            else if (args.InvokedItemContainer?.Tag != null)
             {
                 string pageTag = args.InvokedItemContainer.Tag.ToString() ?? string.Empty;
                 NavigateToPage(pageTag);

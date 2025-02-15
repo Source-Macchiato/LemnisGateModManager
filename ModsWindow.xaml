@@ -97,7 +97,7 @@
                 <NavigationViewItem Content="Home" Icon="Home" Tag="LemnisGateLauncher.Views.ModsHomePage" />
             </NavigationView.MenuItems>
 
-            <Frame x:Name="ContentFrame" Navigated="ContentFrame_Navigated" Padding="55,10,0,0" />
+            <Frame x:Name="ContentFrame" Navigated="ContentFrame_Navigated" Padding="36, 10, 0, 0" />
         </NavigationView>
     </Grid>
 </Window>
