@@ -4,8 +4,6 @@ namespace LemnisGateLauncher
 {
     public sealed partial class MainWindow : Window
     {
-        private ModsWindow? modsWindow;
-
         public MainWindow()
         {
             this.InitializeComponent();
@@ -17,27 +15,27 @@ namespace LemnisGateLauncher
 
         private void ModsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (modsWindow == null)
+            if (App.ModsWindow == null)
             {
-                modsWindow = new ModsWindow();
-                modsWindow.Closed += ModsWindow_Closed;
+                App.ModsWindow = new ModsWindow();
+                App.ModsWindow.Closed += ModsWindow_Closed;
             }
 
-            modsWindow.Activate();
+            App.ModsWindow.Activate();
         }
 
         private void MainWindow_Closed(object sender, WindowEventArgs e)
         {
-            if (modsWindow != null)
+            if (App.ModsWindow != null)
             {
-                modsWindow.Close();
-                modsWindow = null;
+                App.ModsWindow.Close();
+                App.ModsWindow = null;
             }
         }
 
         private void ModsWindow_Closed(object sender, WindowEventArgs e)
         {
-            modsWindow = null;
+            App.ModsWindow = null;
         }
     }
 }
