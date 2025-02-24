@@ -23,8 +23,12 @@
     </StackPanel>
     
     <ui:NavigationView Grid.Row="1">
+      <ui:NavigationView.AutoCompleteBox>
+        <AutoCompleteBox Watermark="Search mods" />
+      </ui:NavigationView.AutoCompleteBox>
+      
       <ui:NavigationView.MenuItems>
-        <ui:NavigationViewItem Content="Home">
+        <ui:NavigationViewItem Content="Mods">
           <ui:NavigationViewItem.IconSource>
             <ui:SymbolIconSource Symbol="Home" />
           </ui:NavigationViewItem.IconSource>
