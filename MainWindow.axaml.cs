@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
+using FluentAvalonia.UI.Media.Animation;
 using LemnisGateLauncher.Views;
 
 namespace LemnisGateLauncher;
@@ -12,6 +13,7 @@ public partial class MainWindow : Window
 
         ExtendClientAreaToDecorationsHint = true;
 
+        // Select default page
         NavigationView.SelectedItem = ModsItem;
         ContentFrame.Content = new ModsUserControl();
     }
@@ -20,14 +22,14 @@ public partial class MainWindow : Window
     {
         if (e.IsSettingsSelected)
         {
-            ContentFrame.Content = new SettingsUserControl();
+            ContentFrame.Navigate(typeof(SettingsUserControl), null, new EntranceNavigationTransitionInfo());
         }
         else if (e.SelectedItem is NavigationViewItem selectedItem)
         {
             switch (selectedItem.Tag)
             {
                 case "Mods":
-                    ContentFrame.Content = new ModsUserControl();
+                    ContentFrame.Navigate(typeof(ModsUserControl), null, new EntranceNavigationTransitionInfo());
                     break;
             }
         }

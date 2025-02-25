@@ -2,7 +2,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="using:FluentAvalonia.UI.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LemnisGateLauncher.Views.ModsUserControl">
-  Welcome to Avalonia!
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <TextBlock
+      Text="Mods"
+      FontSize="28"
+      FontWeight="SemiBold"
+      Margin="36 0 36 0"
+      Grid.Row="0"/>
+
+    <ScrollViewer
+      Padding="36 24 36 0"
+      Grid.Row="1">
+      <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <StackPanel>
+          <Border
+            Background="{DynamicResource ExpanderHeaderBackground}"
+            BackgroundSizing="InnerBorderEdge"
+            BorderBrush="{DynamicResource ExpanderHeaderBorderBrush}"
+            BorderThickness="{DynamicResource ExpanderHeaderBorderThickness}"
+            CornerRadius="{DynamicResource ControlCornerRadius}"
+            MinHeight="64" Padding="{DynamicResource ExpanderHeaderPadding}">
+            <StackPanel>
+              <TextBlock Text="Test" VerticalAlignment="Center" HorizontalAlignment="Left" />
+              <Button VerticalAlignment="Center" HorizontalAlignment="Right">
+                <Button.Flyout>
+                  <MenuFlyout>
+                    <ui:MenuFlyoutItem Text="Delete">
+                      <ui:MenuFlyoutItem.IconSource>
+                        <ui:SymbolIconSource Symbol="Delete" />
+                      </ui:MenuFlyoutItem.IconSource>
+                    </ui:MenuFlyoutItem>
+                  </MenuFlyout>
+                </Button.Flyout>
+              </Button>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+        
+        <ui:SettingsExpander Header="Test" Description="Test">
+          <ui:SettingsExpanderItem Content="Test" />
+        </ui:SettingsExpander>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
 </UserControl>

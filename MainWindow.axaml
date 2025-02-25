@@ -35,7 +35,7 @@
         </ui:NavigationViewItem>
       </ui:NavigationView.MenuItems>
 
-      <ui:Frame x:Name="ContentFrame" />
+      <ui:Frame x:Name="ContentFrame" Padding="0 24 0 0" />
     </ui:NavigationView>
   </Grid>
 </Window>
