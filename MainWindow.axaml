@@ -22,13 +22,13 @@
       <TextBlock Text="Lemnis Gate Launcher" FontSize="12" />
     </StackPanel>
     
-    <ui:NavigationView Grid.Row="1">
+    <ui:NavigationView Grid.Row="1" x:Name="NavigationView" SelectionChanged="OnNavigationViewSelectionChanged">
       <ui:NavigationView.AutoCompleteBox>
         <AutoCompleteBox Watermark="Search mods" />
       </ui:NavigationView.AutoCompleteBox>
       
       <ui:NavigationView.MenuItems>
-        <ui:NavigationViewItem Content="Mods">
+        <ui:NavigationViewItem x:Name="ModsItem" Content="Mods" Tag="Mods">
           <ui:NavigationViewItem.IconSource>
             <ui:SymbolIconSource Symbol="Home" />
           </ui:NavigationViewItem.IconSource>
