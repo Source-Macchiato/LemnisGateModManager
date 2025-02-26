@@ -50,7 +50,9 @@ public partial class App : Application
     {
         CheckConfigFile();
 
-        return _configuration?["GamePath"];
+        var path = _configuration?["GamePath"];
+
+        return string.IsNullOrWhiteSpace(path) ? null : path;
     }
 
     public void CheckConfigFile()

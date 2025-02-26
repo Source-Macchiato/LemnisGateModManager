@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -5,16 +6,32 @@ using Avalonia.Platform.Storage;
 
 namespace LemnisGateLauncher.Views;
 
-public partial class SettingsUserControl : UserControl
+public partial class SettingsUserControl : UserControl, INotifyPropertyChanged
 {
+    private string? _selectedFolderPath;
+    public string SelectedFolderPath
+    {
+        get => _selectedFolderPath ?? App.Instance?.LoadSavedFolderPath() ?? "Folder where Lemnis Gate is located";
+        set
+        {
+            if (_selectedFolderPath != value)
+            {
+                _selectedFolderPath = value;
+                OnPropertyChanged(nameof(SelectedFolderPath));
+            }
+        }
+    }
+
     public SettingsUserControl()
     {
-        InitializeComponent();        
+        InitializeComponent();
+
+        DataContext = this;
     }
 
     private async void OnSelectFolderButton_Click(object sender, RoutedEventArgs e)
     {
-        var window = this.VisualRoot as Window;
+        var window = VisualRoot as Window;
         
         if (window != null)
         {
@@ -23,6 +40,7 @@ public partial class SettingsUserControl : UserControl
             if (!string.IsNullOrEmpty(folder))
             {
                 App.Instance?.SaveSelectedFolderPath(folder);
+                SelectedFolderPath = folder;
             }
         }
     }
@@ -42,5 +60,12 @@ public partial class SettingsUserControl : UserControl
         }
 
         return null;
+    }
+
+    public new event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
