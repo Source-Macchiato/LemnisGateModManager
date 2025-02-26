@@ -35,9 +35,13 @@
               <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel VerticalAlignment="Center" Grid.Column="0">
-              <TextBlock Text="Title" />
-              <TextBlock Text="Version" FontSize="11" Foreground="LightGray" />
+            <StackPanel Orientation="Horizontal" Grid.Column="0">
+              <ToggleSwitch OnContent="" OffContent="" IsChecked="True" />
+
+              <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="Title" />
+                <TextBlock Text="Version" FontSize="11" Foreground="LightGray" />
+              </StackPanel>
             </StackPanel>
             
             <Button VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Width="30" Height="30" Grid.Column="1">
