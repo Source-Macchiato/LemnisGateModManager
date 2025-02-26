@@ -9,28 +9,11 @@ namespace LemnisGateLauncher;
 public partial class App : Application
 {
     public static App? Instance { get; private set; }
-    private readonly IConfiguration? _configuration;
+    private IConfiguration? _configuration;
 
     public App()
     {
         Instance = this;
-
-        string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-
-        if (!File.Exists(configFilePath))
-        {
-            var defaultConfig = new
-            {
-                GamePath = ""
-            };
-            string defaultConfigJson = Newtonsoft.Json.JsonConvert.SerializeObject(defaultConfig, Newtonsoft.Json.Formatting.Indented);
-            File.WriteAllText(configFilePath, defaultConfigJson);
-        }
-
-        _configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .Build();
     }
 
     public override void Initialize()
@@ -50,6 +33,8 @@ public partial class App : Application
 
     public void SaveSelectedFolderPath(string path)
     {
+        CheckConfigFile();
+
         var json = File.ReadAllText("appsettings.json");
         dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
@@ -63,6 +48,31 @@ public partial class App : Application
 
     public string? LoadSavedFolderPath()
     {
+        CheckConfigFile();
+
         return _configuration?["GamePath"];
+    }
+
+    public void CheckConfigFile()
+    {
+        string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+
+        if (!File.Exists(configFilePath))
+        {
+            var defaultConfig = new
+            {
+                GamePath = ""
+            };
+            string defaultConfigJson = Newtonsoft.Json.JsonConvert.SerializeObject(defaultConfig, Newtonsoft.Json.Formatting.Indented);
+            File.WriteAllText(configFilePath, defaultConfigJson);
+        }
+
+        if (_configuration == null)
+        {
+            _configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+        }
     }
 }
