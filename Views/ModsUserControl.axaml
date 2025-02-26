@@ -57,9 +57,6 @@
           </Grid>
         </Border>
         
-        <ui:SettingsExpander Header="Test" Description="Test">
-          <ui:SettingsExpanderItem Content="Test" />
-        </ui:SettingsExpander>
       </StackPanel>
     </ScrollViewer>
   </Grid>
