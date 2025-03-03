@@ -12,7 +12,7 @@
             "id": "MapSelector",
             "description": "Change display name and cover on playable unreleased maps",
             "latest_version": "1.0",
-            "download_url": ""
+            "download_url": "https://github.com/Source-Macchiato/LemnisGate-MapSelector/releases/download/1.0/MapSelector_P.pak"
         }
     ]
 }
