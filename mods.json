@@ -1,0 +1,18 @@
+{
+    "mods": [
+        {
+            "name": "Map Fixer",
+            "id": "MapFixer",
+            "description": "Fix some collisions in playable unreleased maps",
+            "latest_version": "1.0",
+            "download_url": ""
+        },
+        {
+            "name": "Map Selector",
+            "id": "MapSelector",
+            "description": "Change display name and cover on playable unreleased maps",
+            "latest_version": "1.0",
+            "download_url": ""
+        }
+    ]
+}

@@ -12,6 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <None Remove="mods.json" />
   </ItemGroup>
 
   <ItemGroup>
