@@ -55,6 +55,12 @@ public partial class MainWindow : Window
             string json = await _httpClient.GetStringAsync(ModsUrl);
             var modList = JsonConvert.DeserializeObject<ModList>(json);
 
+            if (modList?.Mods == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Mod list is empty");
+                return;
+            }
+
             Mods.Clear();
             foreach (var mod in modList.Mods)
             {
