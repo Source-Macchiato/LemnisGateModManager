@@ -15,7 +15,7 @@ namespace LemnisGateLauncher;
 
 public partial class MainWindow : Window
 {
-    private static readonly string ModsUrl = "https://raw.githubusercontent.com/Source-Macchiato/LemnisGateModManager/master/mods.json";
+    private static readonly string ModsUrl = "https://raw.githubusercontent.com/Source-Macchiato/LemnisGateModManager/main/mods.json";
     private readonly HttpClient _httpClient = new HttpClient();
     private ObservableCollection<Mod> Mods = new ObservableCollection<Mod>();
 
@@ -77,7 +77,7 @@ public partial class MainWindow : Window
             string? searchText = SearchMods.Text;
 
             // Check if a the exists based on name
-            var matchingMod = Mods.FirstOrDefault(mod => mod.Name.Equals(searchText, StringComparison.OrdinalIgnoreCase));
+            var matchingMod = Mods.FirstOrDefault(mod => mod.Name?.Equals(searchText, StringComparison.OrdinalIgnoreCase) == true);
 
             if (matchingMod != null)
             {
@@ -110,7 +110,7 @@ public partial class MainWindow : Window
                 return;
             }
 
-            // Déterminer le chemin de destination
+            // Determine the destination path
             string? saveFolder = App.Instance?.LoadSavedFolderPath();
             if (string.IsNullOrEmpty(saveFolder))
             {
@@ -121,7 +121,7 @@ public partial class MainWindow : Window
             string savePath = Path.Combine(saveFolder, "LemnisGate", "Content", "Paks");
             string filePath = Path.Combine(savePath, $"{mod.Id}_P.pak");
 
-            // Créer le dossier s'il n'existe pas
+            // Create folder if it doesn't exist (this should never happen)
             if (!Directory.Exists(savePath))
             {
                 Directory.CreateDirectory(savePath);
@@ -150,9 +150,18 @@ public class ModList
 
 public class Mod
 {
+    [JsonProperty("name")]
     public string? Name { get; set; }
+
+    [JsonProperty("id")]
     public string? Id { get; set; }
+
+    [JsonProperty("description")]
     public string? Description { get; set; }
+
+    [JsonProperty("latest_version")]
     public string? LatestVersion { get; set; }
+
+    [JsonProperty("download_url")]
     public string? DownloadUrl { get; set; }
 }
