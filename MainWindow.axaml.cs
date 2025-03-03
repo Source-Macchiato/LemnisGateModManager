@@ -1,15 +1,25 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net.Http;
 using Avalonia.Controls;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Media.Animation;
 using LemnisGateLauncher.Views;
+using Newtonsoft.Json;
 
 namespace LemnisGateLauncher;
 
 public partial class MainWindow : Window
 {
+    private static readonly string ModsUrl = "https://raw.githubusercontent.com/Source-Macchiato/LemnisGateModManager/master/mods.json";
+    private readonly HttpClient _httpClient = new HttpClient();
+    private ObservableCollection<Mod> Mods = new ObservableCollection<Mod>();
+
     public MainWindow()
     {
         InitializeComponent();
+        LoadMods();
 
         ExtendClientAreaToDecorationsHint = true;
 
@@ -34,4 +44,40 @@ public partial class MainWindow : Window
             }
         }
     }
+
+    private async void LoadMods()
+    {
+        try
+        {
+            string json = await _httpClient.GetStringAsync(ModsUrl);
+            var modList = JsonConvert.DeserializeObject<ModList>(json);
+
+            Mods.Clear();
+            foreach (var mod in modList.Mods)
+            {
+                Mods.Add(mod);
+            }
+
+            SearchMods.ItemsSource = Mods.Select(mod => mod.Name).ToList()
+                .OrderBy(x => x);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine("Error loading mods: " + ex.Message);
+        }
+    }
+}
+
+public class ModList
+{
+    public Mod[]? Mods { get; set; }
+}
+
+public class Mod
+{
+    public string? Name { get; set; }
+    public string? Id { get; set; }
+    public string? Description { get; set; }
+    public string? LatestVersion { get; set; }
+    public string? DownloadUrl { get; set; }
 }
