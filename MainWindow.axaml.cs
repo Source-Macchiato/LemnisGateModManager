@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
@@ -89,8 +90,55 @@ public partial class MainWindow : Window
                     DefaultButton = ContentDialogButton.Primary
                 };
 
-                await dialog.ShowAsync();
+                var result = await dialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    await DownloadMod(matchingMod);
+                }
             }
+        }
+    }
+
+    private async Task DownloadMod(Mod mod)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(mod.DownloadUrl))
+            {
+                System.Diagnostics.Debug.WriteLine("Download URL is empty.");
+                return;
+            }
+
+            // Déterminer le chemin de destination
+            string? saveFolder = App.Instance?.LoadSavedFolderPath();
+            if (string.IsNullOrEmpty(saveFolder))
+            {
+                System.Diagnostics.Debug.WriteLine("Save folder path is null or empty.");
+                return;
+            }
+
+            string savePath = Path.Combine(saveFolder, "LemnisGate", "Content", "Paks");
+            string filePath = Path.Combine(savePath, $"{mod.Id}_P.pak");
+
+            // Créer le dossier s'il n'existe pas
+            if (!Directory.Exists(savePath))
+            {
+                Directory.CreateDirectory(savePath);
+            }
+
+            using (HttpResponseMessage response = await _httpClient.GetAsync(mod.DownloadUrl))
+            {
+                response.EnsureSuccessStatusCode();
+                byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+                await File.WriteAllBytesAsync(filePath, fileBytes);
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Mod downloaded successfully: {filePath}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error downloading mod: {ex.Message}");
         }
     }
 }
