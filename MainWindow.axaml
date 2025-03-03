@@ -24,7 +24,7 @@
     
     <ui:NavigationView Grid.Row="1" x:Name="NavigationView" SelectionChanged="OnNavigationViewSelectionChanged">
       <ui:NavigationView.AutoCompleteBox>
-        <AutoCompleteBox x:Name="SearchMods" Watermark="Search mods" FilterMode="StartsWith" />
+        <AutoCompleteBox x:Name="SearchMods" Watermark="Search mods" FilterMode="Contains" KeyDown="OnSearch" />
       </ui:NavigationView.AutoCompleteBox>
       
       <ui:NavigationView.MenuItems>
