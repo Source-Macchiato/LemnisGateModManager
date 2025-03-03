@@ -73,16 +73,24 @@ public partial class MainWindow : Window
     {
         if (e.Key == Key.Enter)
         {
-            var dialog = new ContentDialog
-            {
-                Title = "Name",
-                Content = "Description",
-                PrimaryButtonText = "Download",
-                CloseButtonText = "Cancel",
-                DefaultButton = ContentDialogButton.Primary
-            };
+            string? searchText = SearchMods.Text;
 
-            await dialog.ShowAsync();
+            // Check if a the exists based on name
+            var matchingMod = Mods.FirstOrDefault(mod => mod.Name.Equals(searchText, StringComparison.OrdinalIgnoreCase));
+
+            if (matchingMod != null)
+            {
+                var dialog = new ContentDialog
+                {
+                    Title = matchingMod.Name,
+                    Content = matchingMod.Description,
+                    PrimaryButtonText = "Download",
+                    CloseButtonText = "Cancel",
+                    DefaultButton = ContentDialogButton.Primary
+                };
+
+                await dialog.ShowAsync();
+            }
         }
     }
 }
