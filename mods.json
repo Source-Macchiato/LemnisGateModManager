@@ -5,7 +5,7 @@
             "id": "MapFixer",
             "description": "Fix some collisions in playable unreleased maps",
             "latest_version": "1.0",
-            "download_url": ""
+            "download_url": "https://github.com/Source-Macchiato/LemnisGate-MapFixer/releases/download/1.0/MapFixer_P.pak"
         },
         {
             "name": "Map Selector",
