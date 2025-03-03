@@ -5,7 +5,7 @@
         xmlns:ui="using:FluentAvalonia.UI.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="LemnisGateLauncher.MainWindow"
-        Title="Lemnis Gate Launcher">
+        Title="Lemnis Gate Mod Manager">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="32" />
@@ -19,7 +19,7 @@
       IsHitTestVisible="False"
       VerticalAlignment="Center"
       HorizontalAlignment="Left">
-      <TextBlock Text="Lemnis Gate Launcher" FontSize="12" />
+      <TextBlock Text="Lemnis Gate Mod Manager" FontSize="12" />
     </StackPanel>
     
     <ui:NavigationView Grid.Row="1" x:Name="NavigationView" SelectionChanged="OnNavigationViewSelectionChanged">
