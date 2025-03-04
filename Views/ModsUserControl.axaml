@@ -5,6 +5,45 @@
              xmlns:ui="using:FluentAvalonia.UI.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="LemnisGateLauncher.Views.ModsUserControl">
+  <UserControl.Resources>
+    <DataTemplate x:Key="ModTemplate">
+      <Border
+          Background="{DynamicResource ExpanderHeaderBackground}"
+          BackgroundSizing="InnerBorderEdge"
+          BorderBrush="{DynamicResource ExpanderHeaderBorderBrush}"
+          BorderThickness="{DynamicResource ExpanderHeaderBorderThickness}"
+          CornerRadius="{DynamicResource ControlCornerRadius}"
+          MinHeight="64" Padding="{DynamicResource ExpanderContentPadding}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <StackPanel Orientation="Horizontal" Grid.Column="0">
+            <ToggleSwitch OnContent="" OffContent="" IsChecked="{Binding IsEnabled}" />
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+              <TextBlock Text="{Binding Name}" />
+              <TextBlock Text="{Binding Version}" FontSize="11" Foreground="LightGray" />
+            </StackPanel>
+          </StackPanel>
+
+          <Button VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Width="30" Height="30" Grid.Column="1">
+            <PathIcon Width="15" Height="15" Data="M24.002 15.75C22.207 15.75 20.752 14.2949 20.752 12.5C20.752 10.7051 22.207 9.25 24.002 9.25C25.7969 9.25 27.252 10.7051 27.252 12.5C27.252 14.2949 25.7969 15.75 24.002 15.75Z M24.002 27.25C22.207 27.25 20.752 25.7949 20.752 24C20.752 22.2051 22.207 20.75 24.002 20.75C25.7969 20.75 27.252 22.2051 27.252 24C27.252 25.7949 25.7969 27.25 24.002 27.25Z M20.752 35.5C20.752 37.2949 22.207 38.75 24.002 38.75C25.7969 38.75 27.252 37.2949 27.252 35.5C27.252 33.7051 25.7969 32.25 24.002 32.25C22.207 32.25 20.752 33.7051 20.752 35.5Z" />
+
+            <Button.Flyout>
+              <MenuFlyout>
+                <MenuItem Header="Check Update" Command="{Binding CheckUpdateCommand}" />
+                <MenuItem Header="Delete" Command="{Binding DeleteCommand}" />
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+        </Grid>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto" />
@@ -22,41 +61,7 @@
       Padding="36 24 36 0"
       Grid.Row="1">
       <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-        <Border
-            Background="{DynamicResource ExpanderHeaderBackground}"
-            BackgroundSizing="InnerBorderEdge"
-            BorderBrush="{DynamicResource ExpanderHeaderBorderBrush}"
-            BorderThickness="{DynamicResource ExpanderHeaderBorderThickness}"
-            CornerRadius="{DynamicResource ControlCornerRadius}"
-            MinHeight="64" Padding="{DynamicResource ExpanderContentPadding}">
-          <Grid>
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*" />
-              <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Orientation="Horizontal" Grid.Column="0">
-              <ToggleSwitch OnContent="" OffContent="" IsChecked="True" />
-
-              <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <TextBlock Text="Title" />
-                <TextBlock Text="Version" FontSize="11" Foreground="LightGray" />
-              </StackPanel>
-            </StackPanel>
-            
-            <Button VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Width="30" Height="30" Grid.Column="1">
-              <PathIcon Width="15" Height="15" Data="M24.002 15.75C22.207 15.75 20.752 14.2949 20.752 12.5C20.752 10.7051 22.207 9.25 24.002 9.25C25.7969 9.25 27.252 10.7051 27.252 12.5C27.252 14.2949 25.7969 15.75 24.002 15.75Z M24.002 27.25C22.207 27.25 20.752 25.7949 20.752 24C20.752 22.2051 22.207 20.75 24.002 20.75C25.7969 20.75 27.252 22.2051 27.252 24C27.252 25.7949 25.7969 27.25 24.002 27.25Z M20.752 35.5C20.752 37.2949 22.207 38.75 24.002 38.75C25.7969 38.75 27.252 37.2949 27.252 35.5C27.252 33.7051 25.7969 32.25 24.002 32.25C22.207 32.25 20.752 33.7051 20.752 35.5Z" />
-
-              <Button.Flyout>
-                <MenuFlyout>
-                  <MenuItem Header="Check Update" />
-                  <MenuItem Header="Delete" />
-                </MenuFlyout>
-              </Button.Flyout>
-            </Button>
-          </Grid>
-        </Border>
-        
+        <ItemsControl ItemsSource="{Binding Mods}" ItemTemplate="{StaticResource ModTemplate}" />        
       </StackPanel>
     </ScrollViewer>
   </Grid>

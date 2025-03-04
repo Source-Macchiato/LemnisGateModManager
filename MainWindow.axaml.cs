@@ -140,6 +140,9 @@ public partial class MainWindow : Window
                 await File.WriteAllBytesAsync(filePath, fileBytes);
             }
 
+            // Save in config file
+            App.Instance?.SaveDownloadedMod(mod);
+
             System.Diagnostics.Debug.WriteLine($"Mod downloaded successfully: {filePath}");
         }
         catch (Exception ex)
@@ -165,8 +168,8 @@ public class Mod
     [JsonProperty("description")]
     public string? Description { get; set; }
 
-    [JsonProperty("latest_version")]
-    public string? LatestVersion { get; set; }
+    [JsonProperty("version")]
+    public string? Version { get; set; }
 
     [JsonProperty("download_url")]
     public string? DownloadUrl { get; set; }

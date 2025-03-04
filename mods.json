@@ -4,14 +4,14 @@
             "name": "Map Fixer",
             "id": "MapFixer",
             "description": "Fix some collisions in playable unreleased maps",
-            "latest_version": "1.0",
+            "version": "1.0",
             "download_url": "https://github.com/Source-Macchiato/LemnisGate-MapFixer/releases/download/1.0/MapFixer_P.pak"
         },
         {
             "name": "Map Selector",
             "id": "MapSelector",
             "description": "Change display name and cover on playable unreleased maps",
-            "latest_version": "1.0",
+            "version": "1.0",
             "download_url": "https://github.com/Source-Macchiato/LemnisGate-MapSelector/releases/download/1.0/MapSelector_P.pak"
         }
     ]

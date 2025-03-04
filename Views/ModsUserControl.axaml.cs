@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace LemnisGateLauncher.Views;
 
@@ -9,5 +7,7 @@ public partial class ModsUserControl : UserControl
     public ModsUserControl()
     {
         InitializeComponent();
+
+        DataContext = new ModsViewModel();
     }
 }
