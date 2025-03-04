@@ -63,7 +63,8 @@ public partial class App : Application
         {
             var defaultConfig = new
             {
-                GamePath = ""
+                GamePath = "",
+                Mods = new string[] { }
             };
             string defaultConfigJson = Newtonsoft.Json.JsonConvert.SerializeObject(defaultConfig, Newtonsoft.Json.Formatting.Indented);
             File.WriteAllText(configFilePath, defaultConfigJson);
