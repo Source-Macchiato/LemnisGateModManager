@@ -107,6 +107,27 @@ public partial class App : Application
         }
     }
 
+    public bool DoesModExists(Mod mod)
+    {
+        CheckConfigFile();
+
+        var json = File.ReadAllText("appsettings.json");
+        dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+
+        if (jsonObj != null && jsonObj["Mods"] != null)
+        {
+            foreach (var jsonMod in jsonObj["Mods"])
+            {
+                if (jsonMod["id"] != null && jsonMod["id"].ToString() == mod.Id)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void CheckConfigFile()
     {
         string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");

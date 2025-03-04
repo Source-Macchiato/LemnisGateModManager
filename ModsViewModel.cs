@@ -69,17 +69,25 @@ namespace LemnisGateLauncher
 
         public bool IsEnabled { get; set; }
 
-        public ICommand CheckUpdateCommand { get; }
+        public ICommand UpdateCommand { get; }
+
+        public ICommand DeleteCommand { get; }
 
         public ModWrapper(Mod mod)
         {
             Name = mod.Name ?? string.Empty;
             Version = "Version " + mod.Version ?? string.Empty;
             IsEnabled = true;
-            CheckUpdateCommand = new RelayCommand(CheckForUpdates);
+            UpdateCommand = new RelayCommand(Update);
+            DeleteCommand = new RelayCommand(Delete);
         }
 
-        private void CheckForUpdates()
+        private void Update()
+        {
+
+        }
+
+        private void Delete()
         {
 
         }

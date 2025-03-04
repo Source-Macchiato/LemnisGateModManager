@@ -110,6 +110,12 @@ public partial class MainWindow : Window
     {
         try
         {
+            if (App.Instance?.DoesModExists(mod) ?? false)
+            {
+                System.Diagnostics.Debug.WriteLine("Mod is already downloaded.");
+                return;
+            }
+
             if (string.IsNullOrEmpty(mod.DownloadUrl))
             {
                 System.Diagnostics.Debug.WriteLine("Download URL is empty.");

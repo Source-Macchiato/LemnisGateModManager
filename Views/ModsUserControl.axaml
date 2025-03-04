@@ -34,7 +34,7 @@
 
             <Button.Flyout>
               <MenuFlyout>
-                <MenuItem Header="Check Update" Command="{Binding CheckUpdateCommand}" />
+                <MenuItem Header="Update" Command="{Binding UpdateCommand}" />
                 <MenuItem Header="Delete" Command="{Binding DeleteCommand}" />
               </MenuFlyout>
             </Button.Flyout>
