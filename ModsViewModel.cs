@@ -64,7 +64,7 @@ namespace LemnisGateLauncher
         public ModWrapper(Mod mod)
         {
             Name = mod.Name ?? string.Empty;
-            Version = mod.Version ?? string.Empty;
+            Version = "Version " + mod.Version ?? string.Empty;
             IsEnabled = true;
         }
 
