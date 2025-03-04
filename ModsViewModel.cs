@@ -20,7 +20,10 @@ namespace LemnisGateLauncher
                 Mods.Clear();
                 foreach (var mod in loadedMods)
                 {
-                    Mods.Add(new ModWrapper(mod));
+                    if (mod != null)
+                    {
+                        Mods.Add(new ModWrapper(mod));
+                    }
                 }
             }
         }
@@ -30,12 +33,12 @@ namespace LemnisGateLauncher
 
     public class ModWrapper : INotifyPropertyChanged
     {
-        private string _name;
-        private string _version;
+        private string? _name;
+        private string? _version;
 
         public string Name
         {
-            get => _name;
+            get => _name ?? string.Empty;
             set
             {
                 if (_name != value)
@@ -48,7 +51,7 @@ namespace LemnisGateLauncher
 
         public string Version
         {
-            get => _version;
+            get => _version ?? string.Empty;
             set
             {
                 if (_version != value)
