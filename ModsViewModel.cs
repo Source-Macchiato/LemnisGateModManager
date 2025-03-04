@@ -1,14 +1,19 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace LemnisGateLauncher
 {
     class ModsViewModel : INotifyPropertyChanged
     {
+        public static ModsViewModel? Instance { get; private set; }
+
         public ObservableCollection<ModWrapper> Mods { get; set; } = new();
 
         public ModsViewModel()
         {
+            Instance = this;
+
             LoadMods();
         }
 
@@ -64,11 +69,19 @@ namespace LemnisGateLauncher
 
         public bool IsEnabled { get; set; }
 
+        public ICommand CheckUpdateCommand { get; }
+
         public ModWrapper(Mod mod)
         {
             Name = mod.Name ?? string.Empty;
             Version = "Version " + mod.Version ?? string.Empty;
             IsEnabled = true;
+            CheckUpdateCommand = new RelayCommand(CheckForUpdates);
+        }
+
+        private void CheckForUpdates()
+        {
+
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

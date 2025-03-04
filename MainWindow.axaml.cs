@@ -143,6 +143,8 @@ public partial class MainWindow : Window
             // Save in config file
             App.Instance?.SaveDownloadedMod(mod);
 
+            ModsViewModel.Instance?.LoadMods();
+
             System.Diagnostics.Debug.WriteLine($"Mod downloaded successfully: {filePath}");
         }
         catch (Exception ex)
