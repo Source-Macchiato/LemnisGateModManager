@@ -128,6 +128,45 @@ public partial class App : Application
         return false;
     }
 
+    public void UpdateModVersionInConfig(string modId, string? newVersion)
+    {
+        try
+        {
+            if (newVersion != null)
+            {
+                string jsonPath = "appsettings.json";
+                if (!File.Exists(jsonPath))
+                {
+                    System.Diagnostics.Debug.WriteLine("appsettings.json not found.");
+                    return;
+                }
+
+                string json = File.ReadAllText(jsonPath);
+                var jsonObj = Newtonsoft.Json.Linq.JObject.Parse(json);
+
+                if (jsonObj != null && jsonObj["Mods"] is Newtonsoft.Json.Linq.JArray modsArray)
+                {
+                    foreach (var mod in modsArray)
+                    {
+                        if (mod["id"]?.ToString() == modId)
+                        {
+                            mod["version"] = newVersion;
+                            break;
+                        }
+                    }
+
+                    File.WriteAllText(jsonPath, jsonObj.ToString(Newtonsoft.Json.Formatting.Indented));
+                    System.Diagnostics.Debug.WriteLine($"Updated version of {modId} in appsettings.json.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error updating mod version in config: {ex.Message}");
+        }
+    }
+
+
     public void CheckConfigFile()
     {
         string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");

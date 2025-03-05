@@ -42,8 +42,6 @@ namespace LemnisGateLauncher
                     }
                 }
 
-                System.Diagnostics.Debug.WriteLine("test");
-
                 await CompareWithRemoteMods();
             }
         }
@@ -66,6 +64,7 @@ namespace LemnisGateLauncher
                             if (remoteMod != null)
                             {
                                 wrappedMod.RemoteVersion = remoteMod.Version;
+                                wrappedMod.DownloadUrl = remoteMod.DownloadUrl;
                                 wrappedMod.OnPropertyChanged(nameof(wrappedMod.DisplayVersion));
                             }
                             else
@@ -123,13 +122,14 @@ namespace LemnisGateLauncher
             }
         }
 
-        public string RemoteVersion { get; set; }
+        public string? RemoteVersion { get; set; }
 
         public string DisplayVersion =>
         !string.IsNullOrEmpty(RemoteVersion) && RemoteVersion != Version
             ? $"Version {Version} ({RemoteVersion} available)"
             : $"Version {Version}";
 
+        public string? DownloadUrl { get; set; }
         public bool IsEnabled { get; set; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -145,10 +145,67 @@ namespace LemnisGateLauncher
             DeleteCommand = new RelayCommand(Delete);
         }
 
-        private void Update()
+        private async void Update()
         {
-            // Implémentation de la mise à jour
+            try
+            {
+                if (string.IsNullOrEmpty(DownloadUrl))
+                {
+                    System.Diagnostics.Debug.WriteLine("No download URL available for this mod.");
+                    return;
+                }
+
+                string? saveFolder = App.Instance?.LoadSavedFolderPath();
+                if (string.IsNullOrEmpty(saveFolder))
+                {
+                    System.Diagnostics.Debug.WriteLine("Save folder path is null or empty.");
+                    return;
+                }
+
+                string savePath = Path.Combine(saveFolder, "LemnisGate", "Content", "Paks");
+                string filePath = Path.Combine(savePath, $"{Id}_P.pak");
+
+                // Delete previous file if exists
+                if (File.Exists(filePath))
+                {
+                    try
+                    {
+                        File.Delete(filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error deleting old mod file: {ex.Message}");
+                        return;
+                    }
+                }
+
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(DownloadUrl))
+                {
+                    response.EnsureSuccessStatusCode();
+                    byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+                    await File.WriteAllBytesAsync(filePath, fileBytes);
+                }
+
+                // Change local version after update
+                if (RemoteVersion != null)
+                {
+                    Version = RemoteVersion;
+                }
+
+                // Save new version in config file
+                App.Instance?.UpdateModVersionInConfig(Id, RemoteVersion);
+
+                ModsViewModel.Instance?.LoadMods();
+
+                System.Diagnostics.Debug.WriteLine($"Mod updated successfully: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating mod: {ex.Message}");
+            }
         }
+
 
         private void Delete()
         {
