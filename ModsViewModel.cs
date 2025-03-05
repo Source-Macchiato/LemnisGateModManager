@@ -66,6 +66,7 @@ namespace LemnisGateLauncher
                             if (remoteMod != null)
                             {
                                 wrappedMod.RemoteVersion = remoteMod.Version;
+                                wrappedMod.OnPropertyChanged(nameof(wrappedMod.DisplayVersion));
                             }
                             else
                             {
@@ -189,7 +190,7 @@ namespace LemnisGateLauncher
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        public void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
