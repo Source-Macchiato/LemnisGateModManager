@@ -25,7 +25,7 @@
 
             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
               <TextBlock Text="{Binding Name}" />
-              <TextBlock Text="{Binding Version}" FontSize="11" Foreground="LightGray" />
+              <TextBlock Text="{Binding DisplayVersion}" FontSize="11" Foreground="LightGray" />
             </StackPanel>
           </StackPanel>
 
@@ -61,7 +61,7 @@
       Padding="36 24 36 0"
       Grid.Row="1">
       <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top">
-        <ItemsControl ItemsSource="{Binding Mods}" ItemTemplate="{StaticResource ModTemplate}" />        
+        <ItemsControl ItemsSource="{Binding Mods}" ItemTemplate="{StaticResource ModTemplate}" />
       </StackPanel>
     </ScrollViewer>
   </Grid>

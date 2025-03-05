@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace LemnisGateLauncher
@@ -22,7 +24,7 @@ namespace LemnisGateLauncher
             LoadMods();
         }
 
-        public void LoadMods()
+        public async void LoadMods()
         {
             var loadedMods = App.Instance?.LoadDownloadedMods();
             if (loadedMods != null)
@@ -38,6 +40,43 @@ namespace LemnisGateLauncher
                         Mods.Add(wrappedMod);
                         modsDictionary[wrappedMod.Id] = wrappedMod;
                     }
+                }
+
+                System.Diagnostics.Debug.WriteLine("test");
+
+                await CompareWithRemoteMods();
+            }
+        }
+
+        private async Task CompareWithRemoteMods()
+        {
+            string url = "https://raw.githubusercontent.com/Source-Macchiato/LemnisGateModManager/main/mods.json";
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    string json = await client.GetStringAsync(url);
+                    var remoteMods = Newtonsoft.Json.JsonConvert.DeserializeObject<ModsFile>(json);
+
+                    if (remoteMods?.Mods != null)
+                    {
+                        foreach (var wrappedMod in Mods)
+                        {
+                            var remoteMod = remoteMods.Mods.FirstOrDefault(m => m.Id == wrappedMod.Id);
+                            if (remoteMod != null)
+                            {
+                                wrappedMod.RemoteVersion = remoteMod.Version;
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Mod {wrappedMod.Name} (ID: {wrappedMod.Id}) doesn't exists in mods.json");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error loading mods: {ex.Message}");
                 }
             }
         }
@@ -83,6 +122,13 @@ namespace LemnisGateLauncher
             }
         }
 
+        public string RemoteVersion { get; set; }
+
+        public string DisplayVersion =>
+        !string.IsNullOrEmpty(RemoteVersion) && RemoteVersion != Version
+            ? $"Version {Version} ({RemoteVersion} available)"
+            : $"Version {Version}";
+
         public bool IsEnabled { get; set; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -91,7 +137,7 @@ namespace LemnisGateLauncher
         {
             Id = mod.Id ?? string.Empty;
             Name = mod.Name ?? string.Empty;
-            Version = "Version " + mod.Version ?? string.Empty;
+            Version = mod.Version ?? string.Empty;
             IsEnabled = true;
 
             UpdateCommand = new RelayCommand(Update);
@@ -147,5 +193,10 @@ namespace LemnisGateLauncher
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class ModsFile
+    {
+        public List<Mod> Mods { get; set; }
     }
 }
