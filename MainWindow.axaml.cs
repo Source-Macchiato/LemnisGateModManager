@@ -22,13 +22,12 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        LoadMods();
+        LoadLocalMods();
 
         ExtendClientAreaToDecorationsHint = true;
 
         // Select default page
         NavigationView.SelectedItem = ModsItem;
-        ContentFrame.Content = new ModsUserControl();
     }
 
     private void OnNavigationViewSelectionChanged(object sender, NavigationViewSelectionChangedEventArgs e)
@@ -48,7 +47,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void LoadMods()
+    private async void LoadLocalMods()
     {
         try
         {
