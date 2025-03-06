@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -37,15 +38,15 @@ public partial class App : Application
     {
         CheckConfigFile();
 
-        var json = File.ReadAllText("appsettings.json");
+        var configFilePath = Path.Combine(GetAppDirectoryPath(), "appsettings.json");
+        var json = File.ReadAllText(configFilePath);
         dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
         if (jsonObj != null)
         {
             jsonObj["GamePath"] = path;
-
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            File.WriteAllText("appsettings.json", output);
+            File.WriteAllText(configFilePath, output);
         }
     }
 
@@ -53,7 +54,8 @@ public partial class App : Application
     {
         CheckConfigFile();
 
-        var json = File.ReadAllText("appsettings.json");
+        var configFilePath = Path.Combine(GetAppDirectoryPath(), "appsettings.json");
+        var json = File.ReadAllText(configFilePath);
         dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
         // If Mods array doesn't exists add it
@@ -76,7 +78,7 @@ public partial class App : Application
             jsonObj["Mods"].Add(newMod);
 
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-            File.WriteAllText("appsettings.json", output);
+            File.WriteAllText(configFilePath, output);
         }
     }
 
@@ -94,38 +96,16 @@ public partial class App : Application
     {
         CheckConfigFile();
 
-        var json = File.ReadAllText("appsettings.json");
-        dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-        if (jsonObj != null && jsonObj["Mods"] != null)
-        {
-            return jsonObj["Mods"].ToObject<Mod[]>();
-        }
-        else
-        {
-            return [];
-        }
+        var modsSection = _configuration?.GetSection("Mods").Get<Mod[]>();
+        return modsSection ?? [];
     }
 
     public bool DoesModExists(Mod mod)
     {
         CheckConfigFile();
 
-        var json = File.ReadAllText("appsettings.json");
-        dynamic? jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-        if (jsonObj != null && jsonObj["Mods"] != null)
-        {
-            foreach (var jsonMod in jsonObj["Mods"])
-            {
-                if (jsonMod["id"] != null && jsonMod["id"].ToString() == mod.Id)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        var mods = LoadDownloadedMods();
+        return mods.Any(m => m != null && m.Id == mod.Id);
     }
 
     public void UpdateModVersionInConfig(string modId, string? newVersion)
@@ -134,7 +114,7 @@ public partial class App : Application
         {
             if (newVersion != null)
             {
-                string jsonPath = "appsettings.json";
+                string jsonPath = Path.Combine(GetAppDirectoryPath(), "appsettings.json");
                 if (!File.Exists(jsonPath))
                 {
                     System.Diagnostics.Debug.WriteLine("appsettings.json not found.");
@@ -166,10 +146,21 @@ public partial class App : Application
         }
     }
 
+    public string GetAppDirectoryPath()
+    {
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LemnisGateModManager");
+    }
+
 
     public void CheckConfigFile()
     {
-        string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+        string appDirectoryPath = GetAppDirectoryPath();
+        string configFilePath = Path.Combine(appDirectoryPath, "appsettings.json");
+
+        if (!Directory.Exists(appDirectoryPath))
+        {
+            Directory.CreateDirectory(appDirectoryPath);
+        }
 
         if (!File.Exists(configFilePath))
         {
@@ -182,12 +173,9 @@ public partial class App : Application
             File.WriteAllText(configFilePath, defaultConfigJson);
         }
 
-        if (_configuration == null)
-        {
-            _configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
+        _configuration = new ConfigurationBuilder()
+            .SetBasePath(appDirectoryPath)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
-        }
     }
 }

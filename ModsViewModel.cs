@@ -211,7 +211,8 @@ namespace LemnisGateLauncher
         {
             App.Instance?.CheckConfigFile();
 
-            var json = File.ReadAllText("appsettings.json");
+            var configFilePath = Path.Combine(App.Instance?.GetAppDirectoryPath(), "appsettings.json");
+            var json = File.ReadAllText(configFilePath);
             var jsonObj = Newtonsoft.Json.Linq.JObject.Parse(json);
 
             if (jsonObj != null && jsonObj["Mods"] is Newtonsoft.Json.Linq.JArray modsArray)
@@ -221,7 +222,7 @@ namespace LemnisGateLauncher
 
                 jsonObj["Mods"] = filteredMods;
 
-                File.WriteAllText("appsettings.json", jsonObj.ToString(Newtonsoft.Json.Formatting.Indented));
+                File.WriteAllText(configFilePath, jsonObj.ToString(Newtonsoft.Json.Formatting.Indented));
 
                 string? saveFolder = App.Instance?.LoadSavedFolderPath();
                 if (!string.IsNullOrEmpty(saveFolder))
